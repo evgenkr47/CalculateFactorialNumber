@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">FactorialApp</string>
+    <string name="factorial">Введите число, для вычисления факториала</string>
+    <string name="dofactorial">Вычислить факториал</string>
+</resources>
