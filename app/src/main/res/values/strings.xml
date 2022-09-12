@@ -1,5 +1,8 @@
 <resources>
-    <string name="app_name">FactorialApp</string>
-    <string name="factorial">Введите число, для вычисления факториала</string>
-    <string name="dofactorial">Вычислить факториал</string>
+    <string name="app_name">Factorial Test</string>
+    <string name="calculate">Calculate</string>
+    <string name="enter_a_number">Enter your number</string>
+    <string name="calculate_the_factorial">Calculate the factorial</string>
+    <string name="n">n!</string>
+    <string name="result">Result:</string>
 </resources>

@@ -5,15 +5,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.math.BigInteger
 
 class MainViewModel: ViewModel() {
 
-    private val _state = MutableLiveData<State>()
-    val state: LiveData<State>
-    get() = _state
+    private val _state = MutableStateFlow<State?>(null)
+    val state: StateFlow<State?> = _state.asStateFlow()
 
 
     fun calculate(value: String?){

@@ -5,7 +5,11 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.factorialapp.databinding.ActivityMainBinding
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class MainActivity : AppCompatActivity() {
     private val binding by lazy {
@@ -19,36 +23,40 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
         observeViewModel()
-        binding.btCalculate.setOnClickListener {
-            viewModel.calculate(binding.tvEditNumber.text.toString())
+        binding.buttonCalculate.setOnClickListener {
+            viewModel.calculate(binding.editTextNumber.text.toString())
         }
     }
 
     private fun observeViewModel() {
+        lifecycleScope.launchWhenStarted {
+            viewModel.state.onEach {
+                binding.progressBarLoading.visibility = View.GONE
+                binding.buttonCalculate.isEnabled = true
 
-        viewModel.state.observe(this) {
-            binding.progressBarLoading.visibility = View.GONE
-            binding.btCalculate.isEnabled = true
+                when (it) {
+                    is Error -> {
+                        Toast.makeText(
+                            this@MainActivity,
+                            "You did not entered value",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
 
-            when (it) {
-                is Error -> {
-                    Toast.makeText(
-                        this,
-                        "You did not entered value",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    is Progress -> {
+                        binding.progressBarLoading.visibility = View.VISIBLE
+                        binding.buttonCalculate.isEnabled = false
+                    }
+
+                    is Factorial -> {
+                        binding.textViewFactorial.text = it.factorial
+                    }
                 }
-
-                is Progress -> {
-                    binding.progressBarLoading.visibility = View.VISIBLE
-                    binding.btCalculate.isEnabled = false
-                }
-
-                is Factorial -> {
-                    binding.textViewFactorial.text = it.factorial
-                }
-            }
+            }.collect()
         }
+
+
+
     }
 
 }
